@@ -57,11 +57,7 @@ export default function Router() {
         //   },
         {
           path: 'chatbots',
-          element: (
-            <PrivateRoute>
-              <Chatbots />
-            </PrivateRoute>
-          )
+          element: <Chatbots />
         }
         //   {
         //     path: 'blog',
@@ -81,6 +77,7 @@ export default function Router() {
         //   }
       ]
     },
+
     {
       path: '/',
       element: <LogoOnlyLayout />,

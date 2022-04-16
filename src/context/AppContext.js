@@ -1,9 +1,11 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const AppContext = createContext();
 const { Provider } = AppContext;
 
 const AppProvider = ({ children }) => {
+  const [userMode, setUserMode] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [severity, setSeverity] = useState('');
   const [message, setMessage] = useState('');
@@ -18,6 +20,11 @@ const AppProvider = ({ children }) => {
     setMessage(obj.message);
   };
 
+  // useEffect(() => {
+  //   if (userMode) {
+  //   }
+  // }, [nagivate, userMode]);
+
   return (
     <Provider
       value={{
@@ -25,7 +32,9 @@ const AppProvider = ({ children }) => {
         showAlert,
         setShowAlert,
         severity,
-        message
+        message,
+        userMode,
+        setUserMode
       }}
     >
       {children}

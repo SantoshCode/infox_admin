@@ -14,7 +14,6 @@ import {
 } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { setSeconds } from 'date-fns';
 import { Icon } from '@iconify/react';
 import chatbot from '@iconify/icons-ant-design/robot-filled';
 import next from '@iconify/icons-ant-design/arrow-right';
@@ -77,7 +76,13 @@ export default function AddNewChatbotModal(props) {
     });
     toast.promise(
       (async () => {
-        await authAxios.post('createEmbeddings/', { title, description, image: imageUrl, QA: qa });
+        await authAxios.post('createEmbeddings/', {
+          qa_name: title,
+          title,
+          description,
+          image: imageUrl,
+          QA: qa
+        });
         props.handleClose();
         setDb([]);
         setImageUrl('');

@@ -1,4 +1,6 @@
 import { useContext, useRef, useState } from 'react';
+import Switch from '@mui/material/Switch';
+import { useNavigate } from 'react-router-dom';
 // material
 import { alpha } from '@mui/material/styles';
 import { Button, Box, Divider, Typography, Avatar, IconButton } from '@mui/material';
@@ -8,11 +10,12 @@ import logoutIcon from '@iconify/icons-eva/log-out-fill';
 import userIcon from '@iconify/icons-ant-design/user';
 import MenuPopover from '../../components/MenuPopover';
 //
+import { AppContext } from '../../context/AppContext';
 // import account from '../../_mocks_/account';
 import { AuthContext } from '../../context/AuthContext';
 
 // ----------------------------------------------------------------------
-
+const label = { inputProps: { 'aria-label': 'Switch demo' } };
 // const MENU_OPTIONS = [
 //   {
 //     label: 'Home',
@@ -34,10 +37,11 @@ import { AuthContext } from '../../context/AuthContext';
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
+  const nagivate = useNavigate();
   const authContext = useContext(AuthContext);
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
-
+  const appCtx = useContext(AppContext);
   const handleOpen = () => {
     setOpen(true);
   };

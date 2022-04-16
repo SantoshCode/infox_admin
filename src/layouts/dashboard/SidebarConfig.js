@@ -1,9 +1,9 @@
 import { Icon } from '@iconify/react';
 import pieChart2Fill from '@iconify/icons-eva/pie-chart-2-fill';
-import ytVideo from '@iconify/icons-ant-design/youtube';
-import news from '@iconify/icons-eva/archive-fill';
-import fileTextFill from '@iconify/icons-eva/file-text-fill';
-import gallery from '@iconify/icons-eva/image-2-fill';
+// import ytVideo from '@iconify/icons-ant-design/youtube';
+// import news from '@iconify/icons-eva/archive-fill';
+// import fileTextFill from '@iconify/icons-eva/file-text-fill';
+// import gallery from '@iconify/icons-eva/image-2-fill';
 import chatbot from '@iconify/icons-ant-design/robot-filled';
 
 // ----------------------------------------------------------------------

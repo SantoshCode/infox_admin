@@ -26,7 +26,7 @@ const AudioRecorder = ({ title }) => {
           <ReactMediaRecorder
             audio
             mediaRecorderOptions={{
-              //   mimeType: 'audio/wav',
+              mimeType: 'audio/wav',
               audioBitsPerSecond: '16'
             }}
             render={({ status, startRecording, stopRecording, mediaBlobUrl }) => (
@@ -79,7 +79,7 @@ const AudioRecorder = ({ title }) => {
                         type: 'audio/wav'
                       });
 
-                      formData.append('audioFile', audiofile);
+                      formData.append('audio_file', audiofile);
                       (async () => {
                         try {
                           appContext.handleAlert({

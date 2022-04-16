@@ -1,19 +1,28 @@
 // material
 import { Box, Grid, Container, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Switch from '@mui/material/Switch';
 import Loader from '../components/Loader';
+
 // components
 import Page from '../components/Page';
 import { TotalChatbotsCount } from '../components/_dashboard/app';
 import publicFetch from '../utils/fetch';
+import { AppContext } from '../context/AppContext';
+import { AuthContext } from '../context/AuthContext';
 
 // ----------------------------------------------------------------------
+const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
 export default function DashboardApp() {
   const [state, setState] = useState(null);
+  const appCtx = useContext(AppContext);
+  const authContext = useContext(AuthContext);
+  const nagivate = useNavigate();
   useEffect(() => {
     publicFetch
-      .get(`app/get_all`)
+      .get(`app/get_all/`)
       .then((res) => {
         console.log(res);
         setState({ chatbots: JSON.parse(res.data)?.length });
@@ -46,9 +55,12 @@ export default function DashboardApp() {
     <Page title="Dashboard | Admin Panel">
       <Container maxWidth="xl">
         <Box sx={{ pb: 5 }}>
-          <Typography variant="h4">Hi, Welcome back</Typography>
+          <Typography variant="h4">
+            Hi, {authContext.authState?.userInfo?.first_name}{' '}
+            {authContext.authState?.userInfo?.last_name}
+          </Typography>
         </Box>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} direction="column">
           {!state ? (
             <Loader />
           ) : (
@@ -64,6 +76,22 @@ export default function DashboardApp() {
               </Grid>
               <Grid item xs={12} sm={6} md={3}>
                 <TotalGalleryCount count={state.gallery} />
+              </Grid> */}
+              {/* <Grid item xs={12} sm={6} md={3}>
+                <h1>Toggle to User mode</h1>
+                <Switch
+                  {...label}
+                  checked={appCtx.userMode}
+                  onChange={() => {
+                    if (!appCtx.userMode) {
+                      appCtx.setUserMode(true);
+                      authContext.logout();
+                      nagivate('/dashboard/chatbots', { replace: true });
+                    } else {
+                      appCtx.setUserMode(false);
+                    }
+                  }}
+                />
               </Grid> */}
             </>
           )}

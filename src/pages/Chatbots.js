@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 // material
 import { Container, Stack, Typography, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 // components
 import { Icon } from '@iconify/react';
 import Loader from '../components/Loader';
@@ -9,10 +10,13 @@ import Page from '../components/Page';
 import { ChatbotList } from '../components/_dashboard/chatbots';
 import publicFetch from '../utils/fetch';
 import AddNewChatbotModal from '../components/_dashboard/chatbots/AddNewChatbotModal';
+import { AppContext } from '../context/AppContext';
 // ----------------------------------------------------------------------
 
 export default function Chatbots() {
   const [chatbots, setChatbots] = useState(null);
+  const navigate = useNavigate();
+  const appCtx = useContext(AppContext);
   //   const [chatbots, setChatbots] = useState([
   // {
   //   id: 1,
@@ -38,7 +42,7 @@ export default function Chatbots() {
   const [openEditVideoModal, setOpenEditVideoModal] = useState(false);
   useEffect(() => {
     publicFetch
-      .get(`app/get_all`)
+      .get(`app/get_all/`)
       .then((res) => {
         console.log(JSON.parse(res.data));
         setChatbots(JSON.parse(res.data));
@@ -54,17 +58,39 @@ export default function Chatbots() {
         handleClose={() => setOpenEditVideoModal(false)}
       />
       <Container>
+        <Stack
+          direction="row"
+          flexWrap="wrap-reverse"
+          alignItems="center"
+          justifyContent="flex-end"
+          sx={{ mb: 5 }}
+        >
+          {appCtx.userMode && (
+            <Button
+              sx={{ fontSize: '20px' }}
+              variant="contained"
+              onClick={() => {
+                navigate('/login');
+                appCtx.setUserMode(false);
+              }}
+            >
+              Login as admin
+            </Button>
+          )}
+        </Stack>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
             Chatbots
           </Typography>
-          <Button
-            variant="contained"
-            startIcon={<Icon icon={plusFill} />}
-            onClick={() => setOpenEditVideoModal(true)}
-          >
-            New Chatbot
-          </Button>
+          {!appCtx?.userMode && (
+            <Button
+              variant="contained"
+              startIcon={<Icon icon={plusFill} />}
+              onClick={() => setOpenEditVideoModal(true)}
+            >
+              New Chatbot
+            </Button>
+          )}
         </Stack>
 
         <Stack
