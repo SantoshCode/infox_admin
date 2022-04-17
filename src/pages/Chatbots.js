@@ -11,12 +11,14 @@ import { ChatbotList } from '../components/_dashboard/chatbots';
 import publicFetch from '../utils/fetch';
 import AddNewChatbotModal from '../components/_dashboard/chatbots/AddNewChatbotModal';
 import { AppContext } from '../context/AppContext';
+import { FetchContext } from '../context/FetchContext';
 // ----------------------------------------------------------------------
 
 export default function Chatbots() {
   const [chatbots, setChatbots] = useState(null);
   const navigate = useNavigate();
   const appCtx = useContext(AppContext);
+  const { authAxios } = useContext(FetchContext);
   //   const [chatbots, setChatbots] = useState([
   // {
   //   id: 1,
@@ -41,14 +43,14 @@ export default function Chatbots() {
   //   ]);
   const [openEditVideoModal, setOpenEditVideoModal] = useState(false);
   useEffect(() => {
-    publicFetch
+    authAxios
       .get(`app/get_all/`)
       .then((res) => {
         console.log(JSON.parse(res.data));
         setChatbots(JSON.parse(res.data));
       })
       .catch(() => {});
-  }, []);
+  }, [authAxios]);
 
   return (
     <Page title="Admin Panel | Chatbots">

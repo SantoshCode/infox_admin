@@ -8,27 +8,26 @@ import Loader from '../components/Loader';
 // components
 import Page from '../components/Page';
 import { TotalChatbotsCount } from '../components/_dashboard/app';
-import publicFetch from '../utils/fetch';
-import { AppContext } from '../context/AppContext';
 import { AuthContext } from '../context/AuthContext';
+import { FetchContext } from '../context/FetchContext';
 
 // ----------------------------------------------------------------------
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
 export default function DashboardApp() {
   const [state, setState] = useState(null);
-  const appCtx = useContext(AppContext);
   const authContext = useContext(AuthContext);
-  const nagivate = useNavigate();
+  const { authAxios } = useContext(FetchContext);
+
   useEffect(() => {
-    publicFetch
+    authAxios
       .get(`app/get_all/`)
       .then((res) => {
         console.log(res);
         setState({ chatbots: JSON.parse(res.data)?.length });
       })
       .catch(() => {});
-  }, []);
+  }, [authAxios]);
 
   //   useEffect(() => {
   //     setState({
