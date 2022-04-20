@@ -1,13 +1,16 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 // material
 import { Box, Card, Typography, Stack, Button, IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
 // utils
 //
 import { Icon } from '@iconify/react';
+import toast from 'react-hot-toast';
 import playFill from '@iconify/icons-eva/play-circle-fill';
 
 import PlayChatbotModal from './PlayChatbotModal';
+import { MoreMenu } from '../user';
+import { FetchContext } from '../../../context/FetchContext';
 // ----------------------------------------------------------------------
 
 const VideoImgStyle = styled('img')({
@@ -20,10 +23,25 @@ const VideoImgStyle = styled('img')({
 
 // ----------------------------------------------------------------------
 
-export default function ChatBotCard({ chatbot }) {
-  const { Title, Description, Image } = chatbot;
+export default function ChatBotCard({ chatbot, setTriggerRefresh }) {
+  const { authAxios } = useContext(FetchContext);
+  const { Title, Description, Image, QA_NAME } = chatbot;
   //   const youtubeVideoId = youtubeLink.split('v=')[1];
   const [openPlayChatbotModal, setOpenPlayChatbotModal] = useState(false);
+
+  const handleDelete = async () => {
+    toast.promise(
+      (async () => {
+        await authAxios.post(`deleteEmbeddings/${QA_NAME}`);
+        setTriggerRefresh((prev) => prev + 1);
+      })(),
+      {
+        loading: 'Deleting Chatbot...',
+        success: <b>Chatbot Deleted.</b>,
+        error: <b>Could not delete Chatbot.</b>
+      }
+    );
+  };
 
   return (
     <Card sx={{ minHeight: 345 }}>
@@ -33,7 +51,11 @@ export default function ChatBotCard({ chatbot }) {
         handleOpen={() => setOpenPlayChatbotModal(true)}
         handleClose={() => setOpenPlayChatbotModal(false)}
       />
-      {/* <MoreMenu handlePlay={() => setOpenPlayChatbotModal(true)} handleDelete={handleDelete} /> */}
+      <MoreMenu
+        handleDelete={() => {
+          handleDelete();
+        }}
+      />
       <Box sx={{ minHeight: 145 }}>
         {/* {status && (
           <Label
@@ -64,7 +86,7 @@ export default function ChatBotCard({ chatbot }) {
           justifyContent="space-between"
           sx={{ height: 100 }}
         >
-          <Typography variant="h6">{Title}</Typography>
+          <Typography variant="h6">{QA_NAME}</Typography>
           <Typography variant="subtitle2">{Description}</Typography>
         </Stack>
       </Stack>

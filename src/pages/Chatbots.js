@@ -8,16 +8,17 @@ import { Icon } from '@iconify/react';
 import Loader from '../components/Loader';
 import Page from '../components/Page';
 import { ChatbotList } from '../components/_dashboard/chatbots';
-import publicFetch from '../utils/fetch';
 import AddNewChatbotModal from '../components/_dashboard/chatbots/AddNewChatbotModal';
 import { AppContext } from '../context/AppContext';
 import { FetchContext } from '../context/FetchContext';
+import { AuthContext } from '../context/AuthContext';
 // ----------------------------------------------------------------------
 
 export default function Chatbots() {
   const [chatbots, setChatbots] = useState(null);
   const navigate = useNavigate();
   const appCtx = useContext(AppContext);
+  const authContext = useContext(AuthContext);
   const { authAxios } = useContext(FetchContext);
   //   const [chatbots, setChatbots] = useState([
   // {
@@ -42,15 +43,17 @@ export default function Chatbots() {
   // }
   //   ]);
   const [openEditVideoModal, setOpenEditVideoModal] = useState(false);
+  const [triggerRefresh, setTriggerRefresh] = useState(0);
+  const username = authContext.getUsername();
+  const url = appCtx.userMode ? `app/usermode/${username}` : `app/get_all/`;
   useEffect(() => {
     authAxios
-      .get(`app/get_all/`)
+      .get(url)
       .then((res) => {
-        console.log(JSON.parse(res.data));
         setChatbots(JSON.parse(res.data));
       })
       .catch(() => {});
-  }, [authAxios]);
+  }, [authAxios, url, triggerRefresh]);
 
   return (
     <Page title="Admin Panel | Chatbots">
@@ -103,7 +106,15 @@ export default function Chatbots() {
           sx={{ mb: 5 }}
         >
           <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }} />
-          {!chatbots ? <Loader /> : <ChatbotList chatbots={chatbots} />}
+          {!chatbots ? (
+            <Loader />
+          ) : (
+            <ChatbotList
+              chatbots={chatbots}
+              triggerRefresh={triggerRefresh}
+              setTriggerRefresh={setTriggerRefresh}
+            />
+          )}
         </Stack>
       </Container>
     </Page>

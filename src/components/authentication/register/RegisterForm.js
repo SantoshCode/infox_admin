@@ -5,9 +5,11 @@ import { useFormik, Form, FormikProvider } from 'formik';
 import eyeFill from '@iconify/icons-eva/eye-fill';
 import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 // material
 import { Stack, TextField, IconButton, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import publicFetch from '../../../utils/fetch';
 
 // ----------------------------------------------------------------------
 
@@ -30,11 +32,27 @@ export default function RegisterForm() {
       firstName: '',
       lastName: '',
       email: '',
+      username: '',
       password: ''
     },
     validationSchema: RegisterSchema,
-    onSubmit: () => {
-      navigate('/dashboard', { replace: true });
+    onSubmit: async ({ firstName, lastName, email, password, username }) => {
+      try {
+        await publicFetch.post('register/', {
+          firstname: firstName,
+          lastname: lastName,
+          username,
+          email,
+          password
+        });
+        // appContext.handleAlert({ type: 'success', message: 'Logged in' });
+        toast.success('Register success');
+
+        navigate('/login', { replace: true });
+      } catch (error) {
+        toast.error('Error while registering');
+        return console.error(error);
+      }
     }
   });
 
@@ -65,6 +83,15 @@ export default function RegisterForm() {
           <TextField
             fullWidth
             autoComplete="username"
+            type="text"
+            label="Username"
+            {...getFieldProps('username')}
+            error={Boolean(touched.username && errors.username)}
+            helperText={touched.username && errors.username}
+          />
+          <TextField
+            fullWidth
+            autoComplete="email"
             type="email"
             label="Email address"
             {...getFieldProps('email')}

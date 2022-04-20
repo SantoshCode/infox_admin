@@ -1,7 +1,7 @@
-import { Link as RouterLink } from 'react-router-dom';
+import { Link, Link as RouterLink } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
-import { Card, Stack, Link, Container, Typography } from '@mui/material';
+import { Card, Stack, Container, Typography } from '@mui/material';
 // layouts
 import AuthLayout from '../layouts/AuthLayout';
 // components
@@ -33,12 +33,12 @@ const ContentStyle = styled('div')(({ theme }) => ({
 export default function Login() {
   return (
     <RootStyle title="Login | Admin Panel">
-      {/* <AuthLayout>
+      <AuthLayout>
         Don’t have an account? &nbsp;
         <Link underline="none" variant="subtitle2" component={RouterLink} to="/register">
-          Get started
+          Create an account
         </Link>
-      </AuthLayout> */}
+      </AuthLayout>
 
       {/* <MHidden width="mdDown">
         <SectionStyle>
@@ -61,14 +61,14 @@ export default function Login() {
 
           <LoginForm />
 
-          {/* <MHidden width="smUp">
+          <MHidden width="smUp">
             <Typography variant="body2" align="center" sx={{ mt: 3 }}>
               Don’t have an account?&nbsp;
               <Link variant="subtitle2" component={RouterLink} to="register">
                 Get started
               </Link>
             </Typography>
-          </MHidden> */}
+          </MHidden>
         </ContentStyle>
       </Container>
     </RootStyle>

@@ -22,6 +22,7 @@ const AuthProvider = ({ children }) => {
   const setAuthInfo = ({ token, userInfo }) => {
     localStorage.setItem('token', token);
     localStorage.setItem('userInfo', JSON.stringify(userInfo));
+    localStorage.setItem('username', userInfo.username);
     //  localStorage.setItem('expiresAt', expiresAt);
 
     setAuthState({
@@ -37,7 +38,7 @@ const AuthProvider = ({ children }) => {
       localStorage.removeItem('userInfo');
       localStorage.removeItem('expiresAt');
       setAuthState({});
-      history.push('/login');
+      history('/login');
     } catch (err) {
       // eslint-disable-next-line no-console
       throw console.error(err);
@@ -67,6 +68,7 @@ const AuthProvider = ({ children }) => {
 
   //     return Promise.resolve();
   //   };
+  const getUsername = () => localStorage.getItem('username');
 
   return (
     <Provider
@@ -77,7 +79,8 @@ const AuthProvider = ({ children }) => {
         isAuthenticated,
         isAdmin,
         getNewToken,
-        getAccessToken
+        getAccessToken,
+        getUsername
         // getNewTokenForRequest,
       }}
     >

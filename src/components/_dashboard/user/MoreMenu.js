@@ -1,8 +1,5 @@
 import { Icon } from '@iconify/react';
 import { useRef, useState } from 'react';
-import editFill from '@iconify/icons-eva/edit-fill';
-import playFill from '@iconify/icons-eva/play-circle-outline';
-import { Link as RouterLink } from 'react-router-dom';
 import trash2Outline from '@iconify/icons-eva/trash-2-outline';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 // material
@@ -31,18 +28,16 @@ export default function MoreMenu(props) {
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
         <MenuItem
-          //   component={RouterLink}
-          //   to="#"
           sx={{ color: 'text.secondary' }}
           onClick={() => {
-            props.handlePlay();
+            props.handleDelete();
             setIsOpen(false);
           }}
         >
           <ListItemIcon>
-            <Icon icon={playFill} width={24} height={24} />
+            <Icon icon={trash2Outline} width={24} height={24} />
           </ListItemIcon>
-          <ListItemText primary="Play" primaryTypographyProps={{ variant: 'body2' }} />
+          <ListItemText primary="Delete" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
       </Menu>
     </>

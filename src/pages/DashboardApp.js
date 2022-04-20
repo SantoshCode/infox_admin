@@ -9,6 +9,7 @@ import Loader from '../components/Loader';
 import Page from '../components/Page';
 import { TotalChatbotsCount } from '../components/_dashboard/app';
 import { AuthContext } from '../context/AuthContext';
+import { AppContext } from '../context/AppContext';
 import { FetchContext } from '../context/FetchContext';
 
 // ----------------------------------------------------------------------
@@ -18,16 +19,19 @@ export default function DashboardApp() {
   const [state, setState] = useState(null);
   const authContext = useContext(AuthContext);
   const { authAxios } = useContext(FetchContext);
+  const appCtx = useContext(AppContext);
 
+  const username = authContext.getUsername();
+
+  const url = appCtx.userMode ? `app/usermode/${username}` : `app/get_all/`;
   useEffect(() => {
     authAxios
-      .get(`app/get_all/`)
+      .get(url)
       .then((res) => {
-        console.log(res);
         setState({ chatbots: JSON.parse(res.data)?.length });
       })
       .catch(() => {});
-  }, [authAxios]);
+  }, [appCtx.userMode, authAxios, url, username]);
 
   //   useEffect(() => {
   //     setState({
