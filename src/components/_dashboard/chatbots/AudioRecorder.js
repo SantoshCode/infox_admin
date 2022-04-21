@@ -5,18 +5,25 @@ import { useEffect, useContext, useState } from 'react';
 import recording from '@iconify/icons-ic/record-voice-over';
 import mic from '@iconify/icons-eva/mic-off-outline';
 import { Icon } from '@iconify/react';
+import toast from 'react-hot-toast';
 import AppButton from '../../AppButton';
 import { AppContext } from '../../../context/AppContext';
 import publicFetch from '../../../utils/fetch';
+import { FetchContext } from '../../../context/FetchContext';
 
 const AudioRecorder = ({ title }) => {
   const [output, setOutput] = useState('');
   const appContext = useContext(AppContext);
+  const { authAxios } = useContext(FetchContext);
 
   useEffect(() => {
     const speech = new SpeechSynthesisUtterance();
     speech.text = output;
     window.speechSynthesis.speak(speech);
+
+    return () => {
+      setOutput('');
+    };
   }, [output]);
 
   return (
@@ -42,10 +49,11 @@ const AudioRecorder = ({ title }) => {
                       variant="contained"
                       onClick={() => {
                         startRecording();
-                        appContext.handleAlert({
-                          severity: 'success',
-                          message: 'Recording Started'
-                        });
+                        // appContext.handleAlert({
+                        //   severity: 'success',
+                        //   message: 'Recording Started'
+                        // });
+                        toast.success('Recording started');
                       }}
                     >
                       Start Recording
@@ -55,10 +63,11 @@ const AudioRecorder = ({ title }) => {
                     <AppButton
                       variant="contained"
                       onClick={() => {
-                        appContext.handleAlert({
-                          severity: 'success',
-                          message: 'Recording Stopped'
-                        });
+                        // appContext.handleAlert({
+                        //   severity: 'success',
+                        //   message: 'Recording Stopped'
+                        // });
+                        toast.success('Recording Stopped');
                         stopRecording();
                       }}
                     >
@@ -80,29 +89,38 @@ const AudioRecorder = ({ title }) => {
                       });
 
                       formData.append('audio_file', audiofile);
-                      (async () => {
-                        try {
-                          appContext.handleAlert({
-                            severity: 'success',
-                            message: 'Sending Audio...'
-                          });
-                          const res = await publicFetch.post(`app/${title}/`, formData);
-                          appContext.handleAlert({
-                            severity: 'success',
-                            message: 'Audio sent'
-                          });
-                          console.log(res);
-                          const data = await res.data;
-                          setOutput(data.output);
-                          console.log('data from res', data.output);
-                        } catch (error) {
-                          console.log(error);
-                          appContext.handleAlert({
-                            severity: 'error',
-                            message: 'Could not send audio.'
-                          });
+                      toast.promise(
+                        (async () => {
+                          try {
+                            // appContext.handleAlert({
+                            //   severity: 'success',
+                            //   message: 'Sending Audio...'
+                            // });
+                            // toast.success('Recording Stopped');
+                            const res = await publicFetch.post(`app/${title}/`, formData);
+                            // appContext.handleAlert({
+                            //   severity: 'success',
+                            //   message: 'Audio sent'
+                            // });
+                            console.log(res);
+                            const { data } = res;
+                            setOutput(data.output);
+                            console.log('data from res', data.output);
+                          } catch (error) {
+                            throw console.log(error);
+                            // appContext.handleAlert({
+                            //   severity: 'error',
+                            //   message: 'Could not send audio.'
+                            // });
+                          }
+                        })(),
+                        {
+                          loading: 'Sending Audio...',
+                          success: <b>Audio sent</b>,
+                          error: <b>Could not send audio.</b>
                         }
-                      })();
+                      );
+
                       //   {
                       //     loading: 'Sending Audio...',
                       //     success: <b>Audio sent</b>,
