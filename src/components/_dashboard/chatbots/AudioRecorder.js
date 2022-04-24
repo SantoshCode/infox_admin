@@ -20,10 +20,6 @@ const AudioRecorder = ({ title }) => {
     const speech = new SpeechSynthesisUtterance();
     speech.text = output;
     window.speechSynthesis.speak(speech);
-
-    return () => {
-      setOutput('');
-    };
   }, [output]);
 
   return (
