@@ -25,7 +25,7 @@ const VideoImgStyle = styled('img')({
 
 export default function ChatBotCard({ chatbot, setTriggerRefresh }) {
   const { authAxios } = useContext(FetchContext);
-  const { Title, Description, Image, QA_NAME } = chatbot;
+  const { Title, Description, QA_NAME } = chatbot;
   //   const youtubeVideoId = youtubeLink.split('v=')[1];
   const [openPlayChatbotModal, setOpenPlayChatbotModal] = useState(false);
 
@@ -75,7 +75,7 @@ export default function ChatBotCard({ chatbot, setTriggerRefresh }) {
         <VideoImgStyle
           alt="title"
           //  src={`https://img.youtube.com/vi/${youtubeVideoId}/hqdefault.jpg`}
-          src={Image}
+          src="https://www.nimble.com/blog/wp-content/uploads/2019/08/chatbot-2.jpg"
         />
       </Box>
 

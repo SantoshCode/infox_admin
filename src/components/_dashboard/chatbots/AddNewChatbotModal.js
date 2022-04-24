@@ -34,7 +34,7 @@ export default function AddNewChatbotModal(props) {
 
   const [loading, setLoading] = useState(false);
   const [order, setOrder] = useState('asc');
-  const [imageUrl, setImageUrl] = useState('');
+  // const [imageUrl, setImageUrl] = useState('');
   const [description, setDescription] = useState('');
   const [showCreateChatbot, setShowCreateChatbot] = useState(false);
   const [db, setDb] = useState([]);
@@ -80,17 +80,18 @@ export default function AddNewChatbotModal(props) {
           qa_name: title,
           title,
           description,
-          image: imageUrl,
+          // image: imageUrl,
           QA: qa
         });
         props.handleClose();
         setDb([]);
-        setImageUrl('');
+        // setImageUrl('');
         setDescription('');
         setStep(0);
         setAnswer('');
         setQuestion('');
         setTitle('');
+        props.setTriggerRefresh((prev) => prev + 1);
       })(),
       {
         loading: 'Creating Embeddings...',
@@ -155,7 +156,7 @@ export default function AddNewChatbotModal(props) {
                       sx={{ width: '500px' }}
                     />
                   </Grid>
-                  <Grid item xs={12}>
+                  {/* <Grid item xs={12}>
                     <TextField
                       value={imageUrl}
                       onChange={(e) => setImageUrl(e.target.value)}
@@ -167,7 +168,7 @@ export default function AddNewChatbotModal(props) {
                       autoFocus
                       sx={{ width: '500px' }}
                     />
-                  </Grid>
+                  </Grid> */}
                   <Grid item xs={12}>
                     <TextField
                       value={description}
@@ -186,7 +187,7 @@ export default function AddNewChatbotModal(props) {
                   <AppButton
                     loading={loading}
                     onClick={() => {
-                      if (!title || !description || !imageUrl) return;
+                      if (!title || !description) return;
                       setStep((_) => _ + 1);
                     }}
                     fullWidth
