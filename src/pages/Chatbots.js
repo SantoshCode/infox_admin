@@ -58,6 +58,7 @@ export default function Chatbots() {
   return (
     <Page title="Admin Panel | Chatbots">
       <AddNewChatbotModal
+        setTriggerRefresh={setTriggerRefresh}
         open={openEditVideoModal}
         handleOpen={() => setOpenEditVideoModal(true)}
         handleClose={() => setOpenEditVideoModal(false)}
